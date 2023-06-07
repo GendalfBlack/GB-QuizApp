@@ -11,10 +11,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_qText = "questionText"
-private const val ARG_answers = arrayOf("answers")
+private const val ARG_answer1 = "answer1"
+private const val ARG_answer2 = "answer2"
+private const val ARG_answer3 = "answer3"
+private const val ARG_answer4 = "answer4"
 private const val ARG_points = "points"
 private const val ARG_correct = "correctIndex"
 
@@ -40,10 +41,14 @@ class Question : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        answers = ArrayList()
         super.onCreate(savedInstanceState)
         arguments?.let {
             questionText = it.getString(ARG_qText)
-            answers = it.getStringArrayList(ARG_answers)!!
+            answers.add(it.getString(ARG_answer1))
+            answers.add(it.getString(ARG_answer2))
+            if(it.getString(ARG_answer3) != ""){ answers.add(it.getString(ARG_answer3))}
+            if(it.getString(ARG_answer4) != ""){ answers.add(it.getString(ARG_answer4))}
             points = it.getInt(ARG_points)
             correctIndex = it.getInt(ARG_correct)
         }
@@ -62,6 +67,9 @@ class Question : Fragment() {
         buttons.add(view.findViewById(R.id.buttonA2))
         buttons.add(view.findViewById(R.id.buttonA3))
         buttons.add(view.findViewById(R.id.buttonA4))
+
+        if (answers.size < 3){ buttons[2].visibility = View.GONE; buttons[3].visibility = View.GONE}
+        else if(answers.size < 4){ buttons[3].visibility = View.GONE}
 
         text.text = questionText
         for(i in 0 until 4){
@@ -106,14 +114,20 @@ class Question : Fragment() {
         @JvmStatic
         fun newInstance(
             questionText: String,
-            answers: Array<out String?>,
+            answer1: String,
+            answer2: String,
+            answer3: String,
+            answer4: String,
             points : Int,
             correct : Int
         ) =
             Question().apply {
                 arguments = Bundle().apply {
                     putString(ARG_qText, questionText)
-                    putStringArray(ARG_answers, answers)
+                    putString(ARG_answer1, answer1)
+                    putString(ARG_answer2, answer2)
+                    putString(ARG_answer3, answer3)
+                    putString(ARG_answer4, answer4)
                     putInt(ARG_points, points)
                     putInt(ARG_correct, correct)
                 }
